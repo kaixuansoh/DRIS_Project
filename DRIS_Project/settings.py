@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'disasters',
     'volunteers',
     'shelters',
-    'dashboard',
     'home',
 ]
 
