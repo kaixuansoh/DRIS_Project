@@ -13,9 +13,6 @@ class ShelterAdmin(admin.ModelAdmin):
         ('Shelter Information', {
             'fields': ('name', 'address', 'total_capacity', 'current_occupancy', 'is_active')
         }),
-        ('Location', {
-            'fields': ('latitude', 'longitude')
-        }),
         ('Contact Information', {
             'fields': ('contact_person', 'contact_phone')
         }),

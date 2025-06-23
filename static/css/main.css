@@ -60,6 +60,43 @@
     color: #dc3545;
 }
 
+/* Shelter management styles */
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.table th {
+    vertical-align: middle;
+}
+
+.btn-group-sm .btn {
+    margin-right: 2px;
+}
+
+.badge {
+    padding: 0.5em 0.75em;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-text {
+    font-size: 0.85rem;
+}
+.shelter-available {
+    color: #28a745;
+}
+
+.shelter-limited {
+    color: #ffc107;
+}
+
+.shelter-full {
+    color: #dc3545;
+}
+
 /* Profile page customization */
 .profile-header {
     background-color: #f8f9fa;

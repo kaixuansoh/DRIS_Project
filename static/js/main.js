@@ -7,14 +7,40 @@ document.addEventListener('DOMContentLoaded', function() {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
     
-    // Handle alert dismissal
-    var alertList = [].slice.call(document.querySelectorAll('.alert'))
+    // Handle alert dismissal - Auto-dismiss alerts after 5 seconds
+    var alertList = document.querySelectorAll('.alert.alert-dismissible:not(.alert-permanent)');
     alertList.forEach(function (alert) {
         setTimeout(function() {
-            var bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
-        }, 5000);
+            if (alert && document.body.contains(alert)) {
+                // Use Bootstrap's alert dismiss functionality if available
+                if (typeof bootstrap !== 'undefined') {
+                    var bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                } else {
+                    // Fallback to manual removal
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 150);
+                }
+            }
+        }, 5000); // 5 seconds
     });
+    
+    // Shelter management form validation
+    const shelterForm = document.querySelector('form#shelter-form');
+    if (shelterForm) {
+        shelterForm.addEventListener('submit', function(e) {
+            const totalCapacity = parseInt(document.getElementById('id_total_capacity').value);
+            const currentOccupancy = parseInt(document.getElementById('id_current_occupancy').value);
+            
+            if (currentOccupancy > totalCapacity) {
+                e.preventDefault();
+                alert('Error: Current occupancy cannot exceed total capacity.');
+                return false;
+            }
+        });
+    }
     
     // Handle form validation
     var forms = document.querySelectorAll('.needs-validation');
