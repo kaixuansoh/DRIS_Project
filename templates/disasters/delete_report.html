@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - NADMA DRIS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12 col-lg-8 mx-auto">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'disasters:manage_reports' %}">Manage Reports</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'disasters:report_detail' report.id %}">Report Details</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Delete Report</li>
+                </ol>
+            </nav>
+            
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">Confirm Deletion</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone. The report will be permanently deleted.
+                    </div>
+                    
+                    <h4>Report Details</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4">Disaster Type:</dt>
+                        <dd class="col-sm-8">{{ report.get_disaster_type_display }}</dd>
+                        
+                        <dt class="col-sm-4">Location:</dt>
+                        <dd class="col-sm-8">{{ report.location }}</dd>
+                        
+                        <dt class="col-sm-4">Reporter:</dt>
+                        <dd class="col-sm-8">{{ report.reporter.get_full_name|default:report.reporter.username }}</dd>
+                        
+                        <dt class="col-sm-4">Reported At:</dt>
+                        <dd class="col-sm-8">{{ report.reported_at|date:"F d, Y h:i A" }}</dd>
+                        
+                        <dt class="col-sm-4">Severity:</dt>
+                        <dd class="col-sm-8">{{ report.get_severity_display }}</dd>
+                    </dl>
+                    
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'disasters:manage_reports' %}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

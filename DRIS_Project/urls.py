@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('home.urls')),
     path('accounts/', include('accounts.urls')),
     path('shelters/', include('shelters.urls')),
+    path('disasters/', include('disasters.urls')),
 ]
 
 # Serve media files in development

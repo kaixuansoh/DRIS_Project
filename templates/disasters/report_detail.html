@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - NADMA DRIS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12 col-lg-8 mx-auto">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% if user.is_staff or user.is_authority %}
+                        <li class="breadcrumb-item"><a href="{% url 'disasters:manage_reports' %}">Manage Reports</a></li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="{% url 'disasters:my_reports' %}">My Reports</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active" aria-current="page">Report Details</li>
+                </ol>
+            </nav>
+            
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Disaster Report Details</h3>
+                    <span class="ms-2">
+                        {% if report.is_verified %}
+                            <span class="badge bg-success">Verified</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Pending Verification</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Report ID:</div>
+                        <div class="col-md-8">#{{ report.id }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Disaster Type:</div>
+                        <div class="col-md-8">{{ report.get_disaster_type_display }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Location:</div>
+                        <div class="col-md-8">{{ report.location }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Reported By:</div>
+                        <div class="col-md-8">{{ report.reporter.get_full_name|default:report.reporter.username }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Reported At:</div>
+                        <div class="col-md-8">{{ report.reported_at|date:"F d, Y h:i A" }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Severity:</div>
+                        <div class="col-md-8">
+                            {% if report.severity == 'LOW' %}
+                                <span class="badge bg-success">{{ report.get_severity_display }}</span>
+                            {% elif report.severity == 'MEDIUM' %}
+                                <span class="badge bg-warning text-dark">{{ report.get_severity_display }}</span>
+                            {% elif report.severity == 'HIGH' %}
+                                <span class="badge bg-danger">{{ report.get_severity_display }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ report.get_severity_display }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if report.latitude and report.longitude %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Coordinates:</div>
+                        <div class="col-md-8">
+                            {{ report.latitude }}, {{ report.longitude }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Description:</div>
+                        <div class="col-md-8">
+                            <div class="p-3 bg-light rounded">
+                                {{ report.description|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if report.is_verified and report.verified_by %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Verified By:</div>
+                        <div class="col-md-8">
+                            {{ report.verified_by.get_full_name|default:report.verified_by.username }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        {% if user.is_staff or user.is_authority %}
+                            <!-- Admin actions -->
+                            <a href="{% url 'disasters:manage_reports' %}" class="btn btn-outline-secondary">Back to Reports</a>
+                            <a href="{% url 'disasters:verify_report' report.id %}?next={{ request.get_full_path|urlencode }}" class="btn {% if report.is_verified %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+                                {% if report.is_verified %}
+                                    <i class="bi bi-x-circle"></i> Unverify Report
+                                {% else %}
+                                    <i class="bi bi-check-circle"></i> Verify Report
+                                {% endif %}
+                            </a>
+                            <a href="{% url 'disasters:delete_report' report.id %}" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Delete Report
+                            </a>
+                        {% else %}
+                            <!-- Regular user actions -->
+                            <a href="{% url 'disasters:my_reports' %}" class="btn btn-outline-secondary">Back to My Reports</a>
+                            {% if report.reporter == request.user and not report.is_verified %}
+                            <!-- Edit button could be added here in the future -->
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

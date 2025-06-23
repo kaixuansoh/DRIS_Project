@@ -38,11 +38,16 @@
                     </li>
                     
                     {% if user.is_authenticated %}
+                        <!-- All user navigation -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'disasters:submit_report' %}">Report Disaster</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'disasters:my_reports' %}">My Reports</a>
+                        </li>
+                        
                         <!-- Citizen-specific navigation -->
                         {% if user.is_citizen %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Report Disaster</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Request Aid</a>
                         </li>
@@ -59,12 +64,15 @@
                         {% endif %}
                         
                         <!-- Authority-specific navigation -->
-                        {% if user.is_authority %}
+                        {% if user.is_authority or user.is_staff %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'shelters:manage_shelters' %}">Manage Shelters</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'disasters:manage_reports' %}">Manage Disaster Reports</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Assign Volunteers</a>
