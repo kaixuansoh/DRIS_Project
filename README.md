@@ -34,7 +34,6 @@ The Disaster Response Information System (DRIS) is a comprehensive platform that
 - `disasters/`: Disaster reporting and aid request functionality
 - `volunteers/`: Volunteer registration and assignment management
 - `shelters/`: Emergency shelter tracking and management
-- `dashboard/`: Administrative dashboard for authorities
 - `home/`: Main landing pages
 - `templates/`: HTML templates
 - `static/`: Static files (CSS, JS, images)
