@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - NADMA DRIS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12 col-lg-8 mx-auto">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% if user.is_staff or user.is_authority %}
+                        <li class="breadcrumb-item"><a href="{% url 'disasters:manage_aid_requests' %}">Manage Aid Requests</a></li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="{% url 'disasters:my_aid_requests' %}">My Aid Requests</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active" aria-current="page">Aid Request Details</li>
+                </ol>
+            </nav>
+            
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">{{ aid_request.get_aid_type_display }} Aid Request</h3>
+                    <span class="ms-2">
+                        {% if aid_request.status == 'PENDING' %}
+                            <span class="badge bg-secondary">{{ aid_request.get_status_display }}</span>
+                        {% elif aid_request.status == 'APPROVED' %}
+                            <span class="badge bg-success">{{ aid_request.get_status_display }}</span>
+                        {% elif aid_request.status == 'IN_PROGRESS' %}
+                            <span class="badge bg-primary">{{ aid_request.get_status_display }}</span>
+                        {% elif aid_request.status == 'COMPLETED' %}
+                            <span class="badge bg-info">{{ aid_request.get_status_display }}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{{ aid_request.get_status_display }}</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Request ID:</div>
+                        <div class="col-md-8">#{{ aid_request.id }}</div>
+                    </div>
+                    
+                    {% if aid_request.approved_by %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Approved By:</div>
+                        <div class="col-md-8">{{ aid_request.approved_by.get_full_name }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Aid Type:</div>
+                        <div class="col-md-8">{{ aid_request.get_aid_type_display }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Related Disaster:</div>
+                        <div class="col-md-8">
+                            {{ aid_request.disaster_report.get_disaster_type_display }} at {{ aid_request.disaster_report.location }}
+                            {% if aid_request.disaster_report.is_verified %}
+                                <span class="badge bg-success ms-2">Verified</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Priority:</div>
+                        <div class="col-md-8">
+                            {% if aid_request.priority == 'LOW' %}
+                                <span class="badge bg-success">{{ aid_request.priority }}</span>
+                            {% elif aid_request.priority == 'MEDIUM' %}
+                                <span class="badge bg-warning text-dark">{{ aid_request.priority }}</span>
+                            {% elif aid_request.priority == 'HIGH' %}
+                                <span class="badge bg-danger">{{ aid_request.priority }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ aid_request.priority }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Number of People:</div>
+                        <div class="col-md-8">{{ aid_request.people_count }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Requested By:</div>
+                        <div class="col-md-8">{{ aid_request.requester.get_full_name|default:aid_request.requester.username }}</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Requested On:</div>
+                        <div class="col-md-8">{{ aid_request.requested_at|date:"F d, Y h:i A" }}</div>
+                    </div>
+                    
+                    {% if aid_request.completed_at %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Completed On:</div>
+                        <div class="col-md-8">{{ aid_request.completed_at|date:"F d, Y h:i A" }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Description:</div>
+                        <div class="col-md-8">{{ aid_request.description|linebreaks }}</div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        {% if user.is_staff or user.is_authority %}
+                            <a href="{% url 'disasters:manage_aid_requests' %}" class="btn btn-secondary">Back to Aid Requests</a>
+                            {% if aid_request.status != 'COMPLETED' and aid_request.status != 'DENIED' %}
+                                <a href="{% url 'disasters:update_aid_request' aid_request.id %}" class="btn btn-primary ms-2">
+                                    <i class="bi bi-pencil"></i> Update Status
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'disasters:my_aid_requests' %}" class="btn btn-secondary">Back to My Requests</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

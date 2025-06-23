@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2>Update Aid Request Status</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="card-subtitle mb-2 text-muted">Aid Request Details</h5>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th style="width: 30%">Requester</th>
+                                <td>{{ aid_request.requester.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Aid Type</th>
+                                <td>{{ aid_request.get_aid_type_display }}</td>
+                            </tr>
+                            <tr>
+                                <th>For Disaster</th>
+                                <td>{{ aid_request.disaster_report.get_disaster_type_display }} at {{ aid_request.disaster_report.location }}</td>
+                            </tr>
+                            <tr>
+                                <th>Priority</th>
+                                <td>
+                                    {% if aid_request.priority == 'LOW' %}
+                                        <span class="badge bg-success">{{ aid_request.priority }}</span>
+                                    {% elif aid_request.priority == 'MEDIUM' %}
+                                        <span class="badge bg-info">{{ aid_request.priority }}</span>
+                                    {% elif aid_request.priority == 'HIGH' %}
+                                        <span class="badge bg-warning text-dark">{{ aid_request.priority }}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">{{ aid_request.priority }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Number of People</th>
+                                <td>{{ aid_request.people_count }}</td>
+                            </tr>
+                            <tr>
+                                <th>Requested On</th>
+                                <td>{{ aid_request.requested_at|date:"F d, Y H:i" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="card-subtitle mb-2 text-muted">Description</h5>
+                        <p class="card-text">{{ aid_request.description|linebreaks }}</p>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.approved_by }}
+                        
+                        <div class="form-group mb-3">
+                            <label for="{{ form.status.id_for_label }}">Update Status:</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                                <div class="text-danger">{{ form.status.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3" id="completed_at_group" {% if aid_request.status != 'COMPLETED' %}style="display:none"{% endif %}>
+                            <label for="{{ form.completed_at.id_for_label }}">Completion Date & Time:</label>
+                            {{ form.completed_at }}
+                            {% if form.completed_at.errors %}
+                                <div class="text-danger">{{ form.completed_at.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Update Status</button>
+                            <a href="{% url 'disasters:manage_aid_requests' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusSelect = document.getElementById('{{ form.status.id_for_label }}');
+        const completedAtGroup = document.getElementById('completed_at_group');
+        
+        statusSelect.addEventListener('change', function() {
+            if (this.value === 'COMPLETED') {
+                completedAtGroup.style.display = 'block';
+            } else {
+                completedAtGroup.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

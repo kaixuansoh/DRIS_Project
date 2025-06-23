@@ -19,7 +19,7 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card h-100">
             <div class="card-header bg-primary text-white">
                 <h5 class="card-title mb-0">Report Disasters</h5>
@@ -35,7 +35,23 @@
         </div>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">Request Aid</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Request food, water, shelter, medical help or other assistance during emergency situations.</p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'disasters:submit_aid_request' %}" class="btn btn-outline-danger">Request Aid</a>
+                {% elif not user.is_authenticated %}
+                <a href="{% url 'citizen_signup' %}" class="btn btn-outline-danger">Register as Citizen</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
         <div class="card h-100">
             <div class="card-header bg-success text-white">
                 <h5 class="card-title mb-0">Volunteer Your Skills</h5>
@@ -51,7 +67,7 @@
         </div>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card h-100">
             <div class="card-header bg-info text-white">
                 <h5 class="card-title mb-0">Find Shelters</h5>

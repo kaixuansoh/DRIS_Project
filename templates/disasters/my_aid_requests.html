@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - NADMA DRIS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>{{ title }}</h2>
+                <a href="{% url 'disasters:submit_aid_request' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i> Submit New Aid Request
+                </a>
+            </div>
+            
+            {% if aid_requests %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Aid Type</th>
+                                <th>For Disaster</th>
+                                <th>Priority</th>
+                                <th>Date Requested</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in aid_requests %}
+                                <tr>
+                                    <td>{{ request.get_aid_type_display }}</td>
+                                    <td>{{ request.disaster_report.get_disaster_type_display }} at {{ request.disaster_report.location }}</td>
+                                    <td>
+                                        {% if request.priority == 'LOW' %}
+                                            <span class="badge bg-success">{{ request.priority }}</span>
+                                        {% elif request.priority == 'MEDIUM' %}
+                                            <span class="badge bg-warning text-dark">{{ request.priority }}</span>
+                                        {% elif request.priority == 'HIGH' %}
+                                            <span class="badge bg-danger">{{ request.priority }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ request.priority }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ request.requested_at|date:"M d, Y h:i A" }}</td>
+                                    <td>
+                                        {% if request.status == 'PENDING' %}
+                                            <span class="badge bg-secondary">{{ request.get_status_display }}</span>
+                                        {% elif request.status == 'APPROVED' %}
+                                            <span class="badge bg-success">{{ request.get_status_display }}</span>
+                                        {% elif request.status == 'IN_PROGRESS' %}
+                                            <span class="badge bg-primary">{{ request.get_status_display }}</span>
+                                        {% elif request.status == 'COMPLETED' %}
+                                            <span class="badge bg-info">{{ request.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ request.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'disasters:aid_request_detail' request.id %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    You haven't submitted any aid requests yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
