@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}NADMA - Disaster Response Information System{% endblock %}
+
+{% block content %}
+<div class="jumbotron p-5 mb-4 bg-light rounded-3">
+    <div class="container">
+        <h1 class="display-4">Disaster Response Information System</h1>
+        <p class="lead">A comprehensive platform for disaster reporting, volunteer coordination, and aid management during emergencies.</p>
+        
+        {% if not user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'login' %}" class="btn btn-primary me-2">Login</a>
+            <a href="{% url 'signup' %}" class="btn btn-outline-primary">Sign Up</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Report Disasters</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Report disaster events including type, location, and severity to help authorities respond effectively.</p>
+                {% if user.is_citizen %}
+                <a href="#" class="btn btn-outline-primary">Report Now</a>
+                {% elif not user.is_authenticated %}
+                <a href="{% url 'citizen_signup' %}" class="btn btn-outline-primary">Register as Citizen</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">Volunteer Your Skills</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Register your skills and availability to assist in emergency response efforts.</p>
+                {% if user.is_volunteer %}
+                <a href="#" class="btn btn-outline-success">Update Availability</a>
+                {% elif not user.is_authenticated %}
+                <a href="{% url 'volunteer_signup' %}" class="btn btn-outline-success">Register as Volunteer</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">Find Shelters</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Locate nearby emergency shelters with information on capacity and availability.</p>
+                <a href="#" class="btn btn-outline-info">View Shelters</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h5 class="card-title mb-0">Emergency Preparedness</h5>
+            </div>
+            <div class="card-body">
+                <p>Being prepared for a disaster can significantly increase your chances of staying safe. Here are some important steps:</p>
+                <ul>
+                    <li>Create an emergency plan with your family</li>
+                    <li>Prepare an emergency kit with essential supplies</li>
+                    <li>Stay informed about potential risks in your area</li>
+                    <li>Learn first aid and basic survival skills</li>
+                    <li>Keep important documents in a waterproof container</li>
+                </ul>
+                <a href="#" class="btn btn-warning">Learn More</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

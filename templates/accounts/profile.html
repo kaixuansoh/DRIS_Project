@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile | DRIS{% endblock %}
+
+{% block content %}
+<div class="profile-header mb-4 p-4">
+    <div class="row">
+        <div class="col-md-2 text-center">
+            <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-avatar mb-2">
+        </div>
+        <div class="col-md-10">
+            <h2>{{ user.get_full_name }}</h2>
+            <p class="text-muted mb-2">@{{ user.username }} | {{ user.get_user_type_display }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone:</strong> {{ user.phone_number }}</p>
+            {% if user.is_citizen %}
+                <div class="badge bg-primary">Citizen</div>
+            {% elif user.is_volunteer %}
+                <div class="badge bg-success">Volunteer</div>
+            {% elif user.is_authority %}
+                <div class="badge bg-info">Authority</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Full Name</div>
+                    <div class="col-md-9">{{ user.get_full_name }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Username</div>
+                    <div class="col-md-9">{{ user.username }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Email</div>
+                    <div class="col-md-9">{{ user.email }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Phone</div>
+                    <div class="col-md-9">{{ user.phone_number }}</div>
+                </div>
+                {% if user.address %}
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Address</div>
+                    <div class="col-md-9">{{ user.address }}</div>
+                </div>
+                {% endif %}
+                
+                {% if user.is_citizen and user.citizen_profile %}
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Emergency Contact</div>
+                    <div class="col-md-9">{{ user.citizen_profile.emergency_contact }}</div>
+                </div>
+                {% if user.citizen_profile.medical_conditions %}
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Medical Conditions</div>
+                    <div class="col-md-9">{{ user.citizen_profile.medical_conditions }}</div>
+                </div>
+                {% endif %}
+                {% endif %}
+                
+                {% if user.is_volunteer and user.volunteer_profile %}
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Skills</div>
+                    <div class="col-md-9">{{ user.volunteer_profile.get_skills_display }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Availability</div>
+                    <div class="col-md-9">
+                        {% if user.volunteer_profile.availability %}
+                            <span class="badge bg-success">Available</span>
+                        {% else %}
+                            <span class="badge bg-danger">Unavailable</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if user.volunteer_profile.certifications %}
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Certifications</div>
+                    <div class="col-md-9">{{ user.volunteer_profile.certifications }}</div>
+                </div>
+                {% endif %}
+                {% if user.volunteer_profile.experience %}
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Experience</div>
+                    <div class="col-md-9">{{ user.volunteer_profile.experience }}</div>
+                </div>
+                {% endif %}
+                {% endif %}
+                
+                {% if user.is_authority and user.authority_profile %}
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Department</div>
+                    <div class="col-md-9">{{ user.authority_profile.get_department_display }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Position</div>
+                    <div class="col-md-9">{{ user.authority_profile.position }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Badge Number</div>
+                    <div class="col-md-9">{{ user.authority_profile.badge_number }}</div>
+                </div>
+                {% endif %}
+                
+                <a href="#" class="btn btn-primary">Update Information</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        {% if user.is_citizen %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">My Aid Requests</h5>
+            </div>
+            <div class="card-body">
+                {% if user.aid_requests.all %}
+                <ul class="list-group">
+                    {% for request in user.aid_requests.all|slice:":5" %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ request.get_aid_type_display }}
+                        <span class="badge bg-primary rounded-pill">{{ request.get_status_display }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No aid requests found.</p>
+                {% endif %}
+                <a href="#" class="btn btn-outline-primary mt-3">View All Aid Requests</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">My Disaster Reports</h5>
+            </div>
+            <div class="card-body">
+                {% if user.disaster_reports.all %}
+                <ul class="list-group">
+                    {% for report in user.disaster_reports.all|slice:":5" %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ report.get_disaster_type_display }} - {{ report.location }}
+                        <span class="badge {% if report.is_verified %}bg-success{% else %}bg-warning{% endif %} rounded-pill">
+                            {% if report.is_verified %}Verified{% else %}Pending{% endif %}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No disaster reports found.</p>
+                {% endif %}
+                <a href="#" class="btn btn-outline-primary mt-3">View All Reports</a>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if user.is_volunteer %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">My Assignments</h5>
+            </div>
+            <div class="card-body">
+                {% if user.assignments.all %}
+                <ul class="list-group">
+                    {% for assignment in user.assignments.all|slice:":5" %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ assignment.title }}
+                        <span class="badge bg-primary rounded-pill">{{ assignment.get_status_display }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No assignments found.</p>
+                {% endif %}
+                <a href="#" class="btn btn-outline-primary mt-3">View All Assignments</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Availability Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    {% if user.volunteer_profile.availability %}
+                    <button class="btn btn-danger">Set as Unavailable</button>
+                    {% else %}
+                    <button class="btn btn-success">Set as Available</button>
+                    {% endif %}
+                    <a href="#" class="btn btn-outline-primary">Manage Schedule</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if user.is_authority %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Access</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-primary">View Dashboard</a>
+                    <a href="#" class="btn btn-info">Manage Shelters</a>
+                    <a href="#" class="btn btn-success">Assign Volunteers</a>
+                    <a href="#" class="btn btn-warning">Review Aid Requests</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
