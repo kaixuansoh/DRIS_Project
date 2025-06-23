@@ -169,7 +169,7 @@
                 {% else %}
                 <p class="text-muted">No assignments found.</p>
                 {% endif %}
-                <a href="#" class="btn btn-outline-primary mt-3">View All Assignments</a>
+                <a href="{% url 'volunteers:assignment_list' %}" class="btn btn-outline-primary mt-3">View All Assignments</a>
             </div>
         </div>
         
@@ -179,12 +179,7 @@
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    {% if user.volunteer_profile.availability %}
-                    <button class="btn btn-danger">Set as Unavailable</button>
-                    {% else %}
-                    <button class="btn btn-success">Set as Available</button>
-                    {% endif %}
-                    <a href="#" class="btn btn-outline-primary">Manage Schedule</a>
+                    <a href="{% url 'volunteers:availability_list' %}" class="btn btn-outline-primary">Manage Schedule</a>
                 </div>
             </div>
         </div>

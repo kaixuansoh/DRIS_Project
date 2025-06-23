@@ -26,7 +26,7 @@
             </div>
             <div class="card-body">
                 <p class="card-text">Report disaster events including type, location, and severity to help authorities respond effectively.</p>
-                {% if user.is_authenticated %}
+                {% if user.is_citizen %}
                 <a href="{% url 'disasters:submit_report' %}" class="btn btn-outline-primary">Report Now</a>
                 {% elif not user.is_authenticated %}
                 <a href="{% url 'accounts:citizen_signup' %}" class="btn btn-outline-primary">Register as Citizen</a>
@@ -42,7 +42,7 @@
             </div>
             <div class="card-body">
                 <p class="card-text">Request food, water, shelter, medical help or other assistance during emergency situations.</p>
-                {% if user.is_authenticated %}
+                {% if user.is_citizen %}
                 <a href="{% url 'disasters:submit_aid_request' %}" class="btn btn-outline-danger">Request Aid</a>
                 {% elif not user.is_authenticated %}
                 <a href="{% url 'accounts:citizen_signup' %}" class="btn btn-outline-danger">Register as Citizen</a>
@@ -59,7 +59,7 @@
             <div class="card-body">
                 <p class="card-text">Register your skills and availability to assist in emergency response efforts.</p>
                 {% if user.is_volunteer %}
-                <a href="#" class="btn btn-outline-success">Update Availability</a>
+                <a href="{% url 'volunteers:availability_list' %}" class="btn btn-outline-success">Update Availability</a>
                 {% elif not user.is_authenticated %}
                 <a href="{% url 'accounts:volunteer_signup' %}" class="btn btn-outline-success">Register as Volunteer</a>
                 {% endif %}

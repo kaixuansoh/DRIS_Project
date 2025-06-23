@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}My Assignments{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>My Volunteer Assignments</h2>
+    
+    {% if assignments %}
+        <div class="row mt-4">
+            {% for assignment in assignments %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 {% if assignment.status == 'COMPLETED' %}border-success{% elif assignment.status == 'IN_PROGRESS' %}border-primary{% elif assignment.status == 'ASSIGNED' %}border-warning{% elif assignment.status == 'CANCELED' %}border-danger{% endif %}">
+                        <div class="card-header {% if assignment.status == 'COMPLETED' %}bg-success{% elif assignment.status == 'IN_PROGRESS' %}bg-primary{% elif assignment.status == 'ASSIGNED' %}bg-warning{% elif assignment.status == 'CANCELED' %}bg-danger{% endif %} text-white">
+                            <h5 class="card-title mb-0">{{ assignment.title }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Status: 
+                                {% if assignment.status == 'ASSIGNED' %}
+                                    <span class="badge bg-warning text-dark">Assigned</span>
+                                {% elif assignment.status == 'IN_PROGRESS' %}
+                                    <span class="badge bg-primary">In Progress</span>
+                                {% elif assignment.status == 'COMPLETED' %}
+                                    <span class="badge bg-success">Completed</span>
+                                {% elif assignment.status == 'CANCELED' %}
+                                    <span class="badge bg-danger">Canceled</span>
+                                {% endif %}
+                            </h6>
+                            <p class="card-text">{{ assignment.description }}</p>
+                            
+                            {% if assignment.shelter %}
+                                <p><strong>Location:</strong> {{ assignment.shelter.name }}</p>
+                            {% endif %}
+                            
+                            {% if assignment.aid_request %}
+                                <p><strong>Related Aid Request:</strong> {{ assignment.aid_request }}</p>
+                            {% endif %}
+                            
+                            <p><strong>Start Date:</strong> {{ assignment.start_date }}</p>
+                            {% if assignment.end_date %}
+                                <p><strong>End Date:</strong> {{ assignment.end_date }}</p>
+                            {% endif %}
+                            
+                            {% if assignment.volunteer_start_date %}
+                                <p><strong>Started Working:</strong> {{ assignment.volunteer_start_date }}</p>
+                            {% endif %}
+                            
+                            {% if assignment.volunteer_complete_date %}
+                                <p><strong>Completed:</strong> {{ assignment.volunteer_complete_date }}</p>
+                            {% endif %}
+                            
+                            {% if assignment.notes %}
+                                <div class="alert alert-info mt-3">
+                                    <p class="mb-0"><strong>Notes:</strong> {{ assignment.notes }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            {% if assignment.status == 'ASSIGNED' %}
+                                <a href="{% url 'volunteers:update_assignment_status' assignment.id 'IN_PROGRESS' %}" 
+                                   class="btn btn-primary btn-sm">Start Task</a>
+                            {% elif assignment.status == 'IN_PROGRESS' %}
+                                <a href="{% url 'volunteers:update_assignment_status' assignment.id 'COMPLETED' %}" 
+                                   class="btn btn-success btn-sm">Mark Complete</a>
+                            {% endif %}
+                            <small class="text-muted float-end">Assigned by: {{ assignment.assigned_by.username }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-4">
+            <p>You don't have any current assignments. Please check back later or update your availability.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

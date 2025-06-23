@@ -27,6 +27,8 @@ class VolunteerAssignment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
+    volunteer_start_date = models.DateTimeField(null=True, blank=True, help_text="When the volunteer actually started working on the task")
+    volunteer_complete_date = models.DateTimeField(null=True, blank=True, help_text="When the volunteer marked the task as complete")
     notes = models.TextField(blank=True)
     
     def __str__(self):

@@ -51,10 +51,10 @@
                         <!-- Volunteer-specific navigation -->
                         {% if user.is_volunteer %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My Assignments</a>
+                            <a class="nav-link" href="{% url 'volunteers:assignment_list' %}">My Assignments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Update Availability</a>
+                            <a class="nav-link" href="{% url 'volunteers:availability_list' %}">Manage My Availability</a>
                         </li>
                         {% endif %}
                         
@@ -67,7 +67,7 @@
                             <a class="nav-link" href="{% url 'disasters:manage_aid_requests' %}">Manage Aid Requests</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Manage Volunteers</a>
+                            <a class="nav-link" href="{% url 'volunteers:manage_assignments' %}">Assign Volunteers</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'shelters:manage_shelters' %}">Manage Shelters</a>
