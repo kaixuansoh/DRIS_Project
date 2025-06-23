@@ -1,0 +1,48 @@
+{% extends 'accounts/update_profile_base.html' %}
+
+{% block profile_form_content %}
+    <h5 class="border-bottom pb-2 mb-3">Volunteer Information</h5>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="{{ profile_form.skills.id_for_label }}" class="form-label">Skills</label>
+            {{ profile_form.skills }}
+            {% if profile_form.skills.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ profile_form.skills.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <div class="form-check mt-4">
+                {{ profile_form.availability }}
+                <label class="form-check-label" for="{{ profile_form.availability.id_for_label }}">
+                    Currently Available for Volunteer Work
+                </label>
+                {% if profile_form.availability.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ profile_form.availability.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-12">
+            <label for="{{ profile_form.certifications.id_for_label }}" class="form-label">Certifications</label>
+            {{ profile_form.certifications }}
+            {% if profile_form.certifications.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ profile_form.certifications.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-12">
+            <label for="{{ profile_form.experience.id_for_label }}" class="form-label">Experience</label>
+            {{ profile_form.experience }}
+            {% if profile_form.experience.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ profile_form.experience.errors }}
+                </div>
+            {% endif %}
+            <div class="form-text">Please describe your relevant volunteer experience.</div>
+        </div>
+    </div>
+{% endblock %}

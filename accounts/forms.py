@@ -216,3 +216,100 @@ class AuthoritySignUpForm(UserCreationForm):
             authority_profile.save()
         
         return user
+
+# Profile Update Forms
+class UserUpdateForm(forms.ModelForm):
+    """
+    Form for updating basic user information
+    """
+    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'First Name'
+    }))
+    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Last Name'
+    }))
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Email'
+    }))
+    phone_number = forms.CharField(required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Phone Number'
+    }))
+    address = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'Address',
+        'rows': 3
+    }))
+    
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'phone_number', 'address')
+
+
+class CitizenProfileUpdateForm(forms.ModelForm):
+    """
+    Form for updating citizen profile information
+    """
+    emergency_contact = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Emergency Contact Number'
+    }))
+    medical_conditions = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'Any Medical Conditions',
+        'rows': 3
+    }))
+    
+    class Meta:
+        model = CitizenProfile
+        fields = ('emergency_contact', 'medical_conditions')
+
+
+class VolunteerProfileUpdateForm(forms.ModelForm):
+    """
+    Form for updating volunteer profile information
+    """
+    skills = forms.ChoiceField(choices=VolunteerProfile.SKILL_CHOICES, widget=forms.Select(attrs={
+        'class': 'form-control'
+    }))
+    availability = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
+        'class': 'form-check-input'
+    }))
+    certifications = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'Certifications',
+        'rows': 3
+    }))
+    experience = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'Relevant Experience',
+        'rows': 3
+    }))
+    
+    class Meta:
+        model = VolunteerProfile
+        fields = ('skills', 'availability', 'certifications', 'experience')
+
+
+class AuthorityProfileUpdateForm(forms.ModelForm):
+    """
+    Form for updating authority profile information
+    """
+    department = forms.ChoiceField(choices=AuthorityProfile.DEPARTMENT_CHOICES, widget=forms.Select(attrs={
+        'class': 'form-control'
+    }))
+    position = forms.CharField(required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Position/Title'
+    }))
+    badge_number = forms.CharField(required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Badge/ID Number'
+    }))
+    
+    class Meta:
+        model = AuthorityProfile
+        fields = ('department', 'position', 'badge_number')
