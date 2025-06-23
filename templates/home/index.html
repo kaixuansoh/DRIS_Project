@@ -11,8 +11,8 @@
         
         {% if not user.is_authenticated %}
         <div class="mt-4">
-            <a href="{% url 'login' %}" class="btn btn-primary me-2">Login</a>
-            <a href="{% url 'signup' %}" class="btn btn-outline-primary">Sign Up</a>
+            <a href="{% url 'accounts:login' %}" class="btn btn-primary me-2">Login</a>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-outline-primary">Sign Up</a>
         </div>
         {% endif %}
     </div>
@@ -29,7 +29,7 @@
                 {% if user.is_authenticated %}
                 <a href="{% url 'disasters:submit_report' %}" class="btn btn-outline-primary">Report Now</a>
                 {% elif not user.is_authenticated %}
-                <a href="{% url 'citizen_signup' %}" class="btn btn-outline-primary">Register as Citizen</a>
+                <a href="{% url 'accounts:citizen_signup' %}" class="btn btn-outline-primary">Register as Citizen</a>
                 {% endif %}
             </div>
         </div>
@@ -45,7 +45,7 @@
                 {% if user.is_authenticated %}
                 <a href="{% url 'disasters:submit_aid_request' %}" class="btn btn-outline-danger">Request Aid</a>
                 {% elif not user.is_authenticated %}
-                <a href="{% url 'citizen_signup' %}" class="btn btn-outline-danger">Register as Citizen</a>
+                <a href="{% url 'accounts:citizen_signup' %}" class="btn btn-outline-danger">Register as Citizen</a>
                 {% endif %}
             </div>
         </div>
@@ -61,7 +61,7 @@
                 {% if user.is_volunteer %}
                 <a href="#" class="btn btn-outline-success">Update Availability</a>
                 {% elif not user.is_authenticated %}
-                <a href="{% url 'volunteer_signup' %}" class="btn btn-outline-success">Register as Volunteer</a>
+                <a href="{% url 'accounts:volunteer_signup' %}" class="btn btn-outline-success">Register as Volunteer</a>
                 {% endif %}
             </div>
         </div>

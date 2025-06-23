@@ -16,7 +16,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Citizen</h5>
                                 <p class="card-text">Report disasters and request aid during emergencies.</p>
-                                <a href="{% url 'citizen_signup' %}" class="btn btn-primary">Sign up as Citizen</a>
+                                <a href="{% url 'accounts:citizen_signup' %}" class="btn btn-primary">Sign up as Citizen</a>
                             </div>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Volunteer</h5>
                                 <p class="card-text">Offer your skills and time to help during disasters.</p>
-                                <a href="{% url 'volunteer_signup' %}" class="btn btn-success">Sign up as Volunteer</a>
+                                <a href="{% url 'accounts:volunteer_signup' %}" class="btn btn-success">Sign up as Volunteer</a>
                             </div>
                         </div>
                     </div>
@@ -34,14 +34,14 @@
                             <div class="card-body">
                                 <h5 class="card-title">Authority</h5>
                                 <p class="card-text">Manage emergency responses and coordinate efforts.</p>
-                                <a href="{% url 'authority_signup' %}" class="btn btn-info">Sign up as Authority</a>
+                                <a href="{% url 'accounts:authority_signup' %}" class="btn btn-info">Sign up as Authority</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-footer text-center">
-                <p class="mb-0">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+                <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
             </div>
         </div>
     </div>

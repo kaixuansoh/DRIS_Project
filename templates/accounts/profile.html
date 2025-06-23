@@ -99,7 +99,7 @@
                 </div>
                 {% endif %}
                 
-                <a href="{% url 'update_profile' %}" class="btn btn-primary">Update Information</a>
+                <a href="{% url 'accounts:update_profile' %}" class="btn btn-primary">Update Information</a>
             </div>
         </div>
     </div>
@@ -189,22 +189,7 @@
             </div>
         </div>
         {% endif %}
-        
-        {% if user.is_authority %}
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Quick Access</h5>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="{% url 'disasters:manage_reports' %}" class="btn btn-warning">Review Disaster Reports</a>
-                    <a href="{% url 'disasters:manage_aid_requests' %}" class="btn btn-warning">Review Aid Requests</a>
-                    <a href="{% url 'shelters:manage_shelters' %}" class="btn btn-info">Manage Shelters</a>
-                    <a href="#" class="btn btn-success">Assign Volunteers</a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
+    
     </div>
 </div>
 {% endblock %}

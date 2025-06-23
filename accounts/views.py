@@ -26,7 +26,7 @@ class CitizenSignUpView(CreateView):
     model = User
     form_class = CitizenSignUpForm
     template_name = 'accounts/signup.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('accounts:login')
     
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'Citizen'
@@ -37,7 +37,7 @@ class VolunteerSignUpView(CreateView):
     model = User
     form_class = VolunteerSignUpForm
     template_name = 'accounts/signup.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('accounts:login')
     
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'Volunteer'
@@ -48,7 +48,7 @@ class AuthoritySignUpView(CreateView):
     model = User
     form_class = AuthoritySignUpForm
     template_name = 'accounts/signup.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('accounts:login')
     
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'Authority'
@@ -91,7 +91,7 @@ def update_profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated successfully!')
-            return redirect('profile')
+            return redirect('accounts:profile')
         else:
             messages.error(request, 'Please correct the errors below.')
     

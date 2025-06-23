@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}User Details - {{ user_detail.username }} - NADMA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>User Account: {{ user_detail.username }}</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'accounts:manage_users' %}" class="btn btn-secondary">Back to User List</a>
+        </div>
+    </div>
+    
+    <!-- User Basic Info Card -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Basic Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Username:</div>
+                        <div class="col-sm-8">{{ user_detail.username }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Full Name:</div>
+                        <div class="col-sm-8">{{ user_detail.get_full_name|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Email:</div>
+                        <div class="col-sm-8">{{ user_detail.email|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Phone Number:</div>
+                        <div class="col-sm-8">{{ user_detail.phone_number|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Address:</div>
+                        <div class="col-sm-8">{{ user_detail.address|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">User Type:</div>
+                        <div class="col-sm-8">
+                            {% if user_detail.user_type == 'CITIZEN' %}
+                                <span class="badge bg-info">Citizen</span>
+                            {% elif user_detail.user_type == 'VOLUNTEER' %}
+                                <span class="badge bg-success">Volunteer</span>
+                            {% elif user_detail.user_type == 'AUTHORITY' %}
+                                <span class="badge bg-warning">Authority</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Status:</div>
+                        <div class="col-sm-8">
+                            {% if user_detail.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Permissions:</div>
+                        <div class="col-sm-8">
+                            {% if user_detail.is_superuser %}
+                                <span class="badge bg-danger">Admin</span>
+                            {% endif %}
+                            {% if user_detail.is_staff %}
+                                <span class="badge bg-secondary">Staff</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 fw-bold">Date Joined:</div>
+                        <div class="col-sm-8">{{ user_detail.date_joined|date:"F j, Y, g:i a" }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Admin Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Administrative Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <!-- Toggle active status -->
+                        {% if user_detail != request.user %}
+                            <a href="{% url 'accounts:toggle_user_status' user_detail.id %}" 
+                               class="btn {% if user_detail.is_active %}btn-danger{% else %}btn-success{% endif %}"
+                               onclick="return confirm('Are you sure you want to {% if user_detail.is_active %}deactivate{% else %}activate{% endif %} this user account?')">
+                                {% if user_detail.is_active %}Deactivate Account{% else %}Activate Account{% endif %}
+                            </a>
+                            
+                            <!-- Toggle staff status -->
+                            <a href="{% url 'accounts:toggle_staff_status' user_detail.id %}" 
+                               class="btn {% if user_detail.is_staff %}btn-warning{% else %}btn-info{% endif %}"
+                               onclick="return confirm('Are you sure you want to {% if user_detail.is_staff %}remove{% else %}grant{% endif %} staff privileges for this user?')">
+                                {% if user_detail.is_staff %}Remove Staff Status{% else %}Grant Staff Status{% endif %}
+                            </a>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                You cannot modify your own account status.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <!-- User Profile Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    {% if user_detail.user_type == 'CITIZEN' %}
+                        {% if profile %}
+                            <div class="row mb-3">
+                                <div class="col-sm-4 fw-bold">Emergency Contact:</div>
+                                <div class="col-sm-8">{{ profile.emergency_contact|default:"Not provided" }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 fw-bold">Medical Conditions:</div>
+                                <div class="col-sm-8">{{ profile.medical_conditions|default:"Not provided" }}</div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">Citizen profile information is missing.</div>
+                        {% endif %}
+                    {% elif user_detail.user_type == 'VOLUNTEER' %}
+                        {% if profile %}
+                            <div class="row mb-3">
+                                <div class="col-sm-4 fw-bold">Skills:</div>
+                                <div class="col-sm-8">{{ profile.get_skills_display }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 fw-bold">Availability:</div>
+                                <div class="col-sm-8">
+                                    {% if profile.availability %}
+                                        <span class="badge bg-success">Available</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Not Available</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 fw-bold">Certifications:</div>
+                                <div class="col-sm-8">{{ profile.certifications|default:"Not provided" }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 fw-bold">Experience:</div>
+                                <div class="col-sm-8">{{ profile.experience|default:"Not provided" }}</div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">Volunteer profile information is missing.</div>
+                        {% endif %}
+                    {% elif user_detail.user_type == 'AUTHORITY' %}
+                        {% if profile %}
+                            <div class="row mb-3">
+                                <div class="col-sm-4 fw-bold">Department:</div>
+                                <div class="col-sm-8">{{ profile.get_department_display }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 fw-bold">Position:</div>
+                                <div class="col-sm-8">{{ profile.position|default:"Not provided" }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 fw-bold">Badge Number:</div>
+                                <div class="col-sm-8">{{ profile.badge_number|default:"Not provided" }}</div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">Authority profile information is missing.</div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- System Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">System Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Last Login:</div>
+                        <div class="col-sm-8">{{ user_detail.last_login|date:"F j, Y, g:i a"|default:"Never" }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

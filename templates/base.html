@@ -34,7 +34,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        <a class="nav-link" href="{% url 'home:home' %}">Home</a>
                     </li>
                     
                     {% if user.is_authenticated %}
@@ -72,6 +72,13 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'shelters:manage_shelters' %}">Manage Shelters</a>
                         </li>
+                        
+                        <!-- Staff/Admin-only navigation -->
+                        {% if user.is_staff or user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:manage_users' %}">Manage Users</a>
+                        </li>
+                        {% endif %}
                         {% endif %}
                     {% endif %}
                     
@@ -83,17 +90,17 @@
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                        <a class="nav-link" href="{% url 'accounts:profile' %}">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                        <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -103,16 +110,7 @@
     
     <!-- Main Content -->
     <main class="py-4 flex-grow-1">
-        <div class="container">
-            {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-            {% endif %}
-            
+        <div class="container">            
             {% block content %}{% endblock %}
         </div>
     </main>

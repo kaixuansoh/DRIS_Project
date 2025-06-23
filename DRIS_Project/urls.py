@@ -23,9 +23,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('shelters/', include('shelters.urls')),
-    path('disasters/', include('disasters.urls')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('shelters/', include('shelters.urls', namespace='shelters')),
+    path('disasters/', include('disasters.urls', namespace='disasters')),
 ]
 
 # Serve media files in development
