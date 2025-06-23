@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - NADMA DRIS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Shelter Directory</h2>
+            <p>Find safe shelter locations across the country. These facilities are prepared to provide temporary accommodation during emergencies.</p>
+            
+            {% if shelters %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for shelter in shelters %}
+                <div class="col">
+                    <div class="card h-100 {% if shelter.is_full %}border-danger{% else %}border-success{% endif %}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ shelter.name }}</h5>
+                            <p class="card-text">{{ shelter.address }}</p>
+                            <div class="d-flex justify-content-between">
+                                <span class="badge bg-info">Capacity: {{ shelter.total_capacity }}</span>
+                                <span class="badge {% if shelter.is_full %}bg-danger{% else %}bg-success{% endif %}">
+                                    Available: {{ shelter.available_capacity }}
+                                </span>
+                            </div>
+                            <p class="card-text mt-2"><small class="text-muted">Contact: {{ shelter.contact_person }} - {{ shelter.contact_phone }}</small></p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'shelters:shelter_detail' shelter.id %}" class="btn btn-sm btn-primary">More Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                No active shelters available at this time.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
