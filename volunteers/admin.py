@@ -5,7 +5,7 @@ from .models import VolunteerAssignment, VolunteerAvailability
 
 @admin.register(VolunteerAssignment)
 class VolunteerAssignmentAdmin(admin.ModelAdmin):
-    list_display = ('volunteer', 'title', 'status', 'start_date', 'end_date')
+    list_display = ('volunteer', 'title', 'status', 'start_date', 'end_date', 'volunteer_start_date', 'volunteer_complete_date')
     list_filter = ('status', 'created_at', 'start_date')
     search_fields = ('volunteer__username', 'title', 'description')
     readonly_fields = ('created_at',)
@@ -17,7 +17,7 @@ class VolunteerAssignmentAdmin(admin.ModelAdmin):
             'fields': ('aid_request', 'shelter')
         }),
         ('Timing', {
-            'fields': ('created_at', 'start_date', 'end_date')
+            'fields': ('created_at', 'start_date', 'end_date', 'volunteer_start_date', 'volunteer_complete_date')
         }),
         ('Management', {
             'fields': ('assigned_by', 'notes')
